@@ -1,0 +1,6 @@
+Program 5 for CS770
+Carick Wienke
+
+This program animates object moving along paths.
+
+in1 provides sample input. 
