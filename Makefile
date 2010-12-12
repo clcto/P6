@@ -15,7 +15,7 @@ P6: $(OBJECTS)
 	$(CC) $(OBJECTS) -o $@ $(LDFLAGS)
 
 $(OBJECTDIR)/%.o: $(SOURCEDIR)/%.cpp
-	$(CC) $(CFLAGS) $^ -o $@ -g
+	$(CC) $(CFLAGS) $^ -o $@
 
 .PHONY: clean
 clean:

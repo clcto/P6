@@ -84,7 +84,8 @@ void Scene::Redraw()
    glMatrixMode( GL_MODELVIEW );
    glLoadIdentity();
 
-   camera.NextFrame();
+   if( isAnimating )
+      camera.NextFrame();
    camera.SetUpGLMatrices();
    directionalLight->GLInit();
    pointLight->GLInit();
@@ -107,6 +108,7 @@ void Scene::Redraw()
 void Scene::AddShape( Shape* newShape, string name )
 {
    shapes[name] = newShape;
+   names.push_back( name );
 }
 
 Camera& Scene::GetCamera()
@@ -114,6 +116,10 @@ Camera& Scene::GetCamera()
    return camera;
 }
 
+vector<string> Scene::GetNames()
+{
+   return names;
+}
    // -----------------------------------------------------
    // Shape* GetShape( name )
    //    returns the shape that has the name passed,
@@ -370,4 +376,9 @@ void trim( string& str )
    }
    else
       str.erase( str.begin(), str.end() );
+}
+
+void Scene::SetRunning( bool r )
+{
+   isAnimating = r;
 }

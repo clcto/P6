@@ -93,9 +93,6 @@ void Camera::NextFrame()
    else
    {
       ++cur;
-      cerr << path[cur].location[X] << "\n";
-      cerr << path[cur].location[Y] << "\n";
-      cerr << path[cur].location[Z] << "\n";
       SetEyeRectangular( path[ cur ].location[X],
                          path[ cur ].location[Y],
                          path[ cur ].location[Z] );
@@ -126,8 +123,6 @@ void Camera::SetDeltaEyeRectangular(
    eye[X] += dx;
    eye[Y] += dy;
    eye[Z] += dz;
-
-   cerr << eye[X] << ", " << eye[Y] << ", " << eye[Z] << "\n";
 }
 
 void Camera::SetPath( Path p )

@@ -41,11 +41,14 @@ void Control::Initialize( string name, int windowID )
       glui->set_main_gfx_window( windowID );
    
    createCamera();
-   createDirectional();
-   createPoint();
+   createShapeControls();
+
+   glui->add_button( "Pause", Modified_Pause, 
+      modified_cb );
+   glui->add_button( "Run", Modified_Run, 
+      modified_cb );
 
    Control::LoadValues();
-
 }
 
 void Control::LoadValues()
@@ -59,24 +62,6 @@ void Control::LoadValues()
    cam_elevation->set_float_val(
       s->GetCamera().GetElevation() ); 
 
-   dir_enable->set_int_val(
-      s->GetDirectionalLight()->IsOn() );
-   dir_heading->set_float_val(
-      s->GetDirectionalLight()->GetHeading() );
-   dir_elevation->set_float_val(
-      s->GetDirectionalLight()->GetElevation() );
-
-   Point p = s->GetPointLight()->GetLocation();
-   pnt_enable->set_int_val(
-      s->GetPointLight()->IsOn() );
-   pnt_x->set_float_val( p[X] );
-   pnt_y->set_float_val( p[Y] );
-   pnt_z->set_float_val( p[Z] );
-
-   Color c = s->GetPointLight()->GetColor();
-   redControl->set_float_val( c.red );
-   greenControl->set_float_val( c.green );
-   blueControl->set_float_val( c.blue );
 }
 
    // -----------------------------------------------------
@@ -97,12 +82,12 @@ void Control::modified_cb( int control )
 void Control::modified( int control )
 {
    Camera &cam = Scene::Instance()->GetCamera();
-   Light *l;
       
       // used to convert the 3 spinners into
       // one struct for passing to the cam
 
-//   Shape* selected = Scene::Instance()->GetSelected();
+   Scene* s;
+   vector<string> names;
    switch( control )
    {
       case Modified_Camera:
@@ -111,35 +96,25 @@ void Control::modified( int control )
             cam_heading->get_float_val(),
             cam_radius->get_float_val() );
          break;
-            
-      case Modified_Directional:
-         l = Scene::Instance()->GetDirectionalLight();
-         l->SetLocationSpherical(
-            dir_elevation->get_float_val(),
-            dir_heading->get_float_val() );
-         
-         if( dir_enable->get_int_val() )
-            l->Enable();
-         else
-            l->Disable();
+      case Modified_ShapePause:
+         s = Scene::Instance();
+         names = s->GetNames();
+         s->GetShape( 
+            names[ selectionControl->get_int_val() ] 
+            )->SetAnimate( false );
          break;
-
-      case Modified_Point:
-         l = Scene::Instance()->GetPointLight();
-         l->SetLocationRectangular(
-            pnt_x->get_float_val(),
-            pnt_y->get_float_val(),
-            pnt_z->get_float_val() );
-
-         l->SetColor(
-            redControl->get_float_val(),
-            greenControl->get_float_val(),
-            blueControl->get_float_val() );
-         
-         if( pnt_enable->get_int_val() )
-            l->Enable();
-         else
-            l->Disable();
+      case Modified_ShapeRun:
+         s = Scene::Instance();
+         names = s->GetNames();
+         s->GetShape( 
+            names[ selectionControl->get_int_val() ] 
+            )->SetAnimate( true );
+         break;
+      case Modified_Pause:
+         Scene::Instance()->SetRunning( false );
+         break;
+      case Modified_Run:
+         Scene::Instance()->SetRunning( true );
          break;
    }
 
@@ -171,95 +146,22 @@ void Control::createCamera()
    cam_elevation->set_speed( .2 );
 }
 
-   // createColor
-   //    creates the Color part of the gui
-void Control::createColor()
+void Control::createShapeControls()
 {
    GLUI_Panel *panel;
+   panel = glui->add_panel( "Animation Controls" );
+   
+   selectionControl = glui->add_listbox_to_panel(
+      panel, "Shape", NULL, Modified_Selection,
+      modified_cb );   
+   
+   vector<string> names = Scene::Instance()->GetNames();
 
-   panel = glui->add_panel( "Color" );
+   for( uint i = 0; i < names.size(); ++i )
+      selectionControl->add_item( i, names[i].c_str() );
 
-   redControl = new GLUI_Spinner( 
-      panel, "Red", GLUI_SPINNER_FLOAT, NULL, 
-      Modified_Color, modified_cb );
-   redControl->set_float_limits( 0, 1 );
-   redControl->set_speed( 0.02 );
-
-   greenControl = new GLUI_Spinner( 
-      panel, "Green", GLUI_SPINNER_FLOAT, NULL, 
-      Modified_Color, modified_cb );
-   greenControl->set_float_limits( 0, 1 );
-   greenControl->set_speed( 0.02 );
-
-   blueControl = new GLUI_Spinner( 
-      panel, "Blue", GLUI_SPINNER_FLOAT, NULL, 
-      Modified_Color, modified_cb );
-   blueControl->set_float_limits( 0, 1 );
-   blueControl->set_speed( 0.02 );
-}
-
-void Control::createDirectional()
-{
-   GLUI_Panel* panel = glui->add_panel( "Directional Light" );
-
-   dir_enable = glui->add_checkbox_to_panel(
-      panel, "Enable", NULL, Modified_Directional,
-      modified_cb );
-
-   dir_heading = glui->add_spinner_to_panel( panel, "Heading", 
-      GLUI_SPINNER_FLOAT, NULL, 
-      Modified_Directional, modified_cb );
-   dir_heading->set_float_limits( 0, 360 );
-   dir_heading->set_speed( .2 );
-
-   dir_elevation = glui->add_spinner_to_panel( panel, "Elevation",
-      GLUI_SPINNER_FLOAT, NULL,
-      Modified_Directional, modified_cb );
-   dir_elevation->set_float_limits( -90, 90 );
-   dir_elevation->set_speed( .2 );
-}
-
-void Control::createPoint()
-{
-   GLUI_Panel* panel = glui->add_panel( "Point Light" );
-
-   pnt_enable = glui->add_checkbox_to_panel(
-      panel, "Enable", NULL, Modified_Point,
-      modified_cb );
-
-   pnt_x = glui->add_spinner_to_panel( panel, "x", 
-      GLUI_SPINNER_FLOAT, NULL, 
-      Modified_Point, modified_cb );
-   pnt_x->set_float_limits( -300, 300 );
-   pnt_x->set_speed( .2 );
-
-   pnt_y = glui->add_spinner_to_panel( panel, "y",
-      GLUI_SPINNER_FLOAT, NULL,
-      Modified_Point, modified_cb );
-   pnt_y->set_float_limits( -300, 300 );
-   pnt_y->set_speed( .2 );
-
-   pnt_z = glui->add_spinner_to_panel( panel, "z",
-      GLUI_SPINNER_FLOAT, NULL,
-      Modified_Point, modified_cb );
-   pnt_z->set_float_limits( -300, 300 );
-   pnt_z->set_speed( .2 );
-
-   redControl = new GLUI_Spinner( 
-      panel, "Red", GLUI_SPINNER_FLOAT, NULL, 
-      Modified_Point, modified_cb );
-   redControl->set_float_limits( 0, 1 );
-   redControl->set_speed( 1 );
-
-   greenControl = new GLUI_Spinner( 
-      panel, "Green", GLUI_SPINNER_FLOAT, NULL, 
-      Modified_Point, modified_cb );
-   greenControl->set_float_limits( 0, 1 );
-   greenControl->set_speed( 1 );
-
-   blueControl = new GLUI_Spinner( 
-      panel, "Blue", GLUI_SPINNER_FLOAT, NULL, 
-      Modified_Point, modified_cb );
-   blueControl->set_float_limits( 0, 1 );
-   blueControl->set_speed( 1 );
+   glui->add_button_to_panel( panel, "Pause",
+      Modified_ShapePause, modified_cb );
+   glui->add_button_to_panel( panel, "Run",
+      Modified_ShapeRun, modified_cb );
 }

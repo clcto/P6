@@ -190,3 +190,8 @@ void Shape::SetVisible( bool v )
 {
    visible = v;
 }
+
+void Shape::SetAnimate( bool a )
+{
+   animate = a;
+}

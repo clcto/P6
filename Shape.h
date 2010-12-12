@@ -61,6 +61,7 @@ class Shape
       void SetPath( Path );
 
       void SetVisible( bool );
+      void SetAnimate( bool );
 
       virtual void NextFrame();
 

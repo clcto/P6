@@ -32,8 +32,10 @@ class Scene
       void AddShape( Shape* newShape, string name );
       Camera& GetCamera();
       Shape* GetShape( string name );
+      vector<string> GetNames();
       void ReadFile( string );
       bool IsRunning();
+      void SetRunning( bool );
 
       Light* GetDirectionalLight();
       Light* GetPointLight();
@@ -58,6 +60,7 @@ class Scene
 
       map<string, Path*> paths;
       map<string, Shape*> shapes;
+      vector<string> names;
 };
 
 vector<string> tokenize( const string& input,

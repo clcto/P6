@@ -45,33 +45,17 @@ class Control
       void createDirectional();
       void createPoint();
       void createColor();
+      void createShapeControls();
       
          // enum determining which value changed
       enum ModifiedControl
       {
-         Modified_Directional,
-         Modified_Point,
          Modified_Camera,
-
-
-         Modified_Eye,
-         Modified_Center,
-         Modified_Up,
-         Modified_Mode,
-         Modified_OrthoFrustum,
-         Modified_Perspective,
-         Modified_Right,
-         Modified_Left,
-         Modified_Top,
-         Modified_Bottom,
-         Modified_FOV,
-         Modified_Aspect,
-         Modified_Selection,
-         Modified_Translation,
-         Modified_Scale,
-         Modified_Rotation,
-         Modified_Color,
-         Modified_Quit
+         Modified_ShapePause,
+         Modified_ShapeRun,
+         Modified_Pause,
+         Modified_Run,
+         Modified_Selection
       };
 
          // Controls
@@ -82,26 +66,7 @@ class Control
                    *cam_heading,
                    *cam_elevation;
 
-         // Directional Light properties
-      GLUI_Spinner *dir_heading,
-                   *dir_elevation;
-      GLUI_Checkbox *dir_enable;
-
-        // Point light properties 
-      GLUI_Checkbox *pnt_enable;
-      GLUI_Spinner *pnt_x, *pnt_y, *pnt_z;
-
       GLUI_Listbox *selectionControl;
-      
-      GLUI_Spinner *redControl;
-      GLUI_Spinner *greenControl;
-      GLUI_Spinner *blueControl;
-      
-      GLUI_EditText *saveFileControl;
-      GLUI_Button   *saveButton;
-      GLUI_StaticText *saveStatus;
-
-
 };
 
 #endif // CONTROL_H_

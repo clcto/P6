@@ -7,19 +7,27 @@ path path_1
 end
 
 path cam_path
-   0 30 30 30
-   5 30 -30 30
-   10 -30 -30 30
-   15 -30 30 30
+   0 60 0 0 
+   5 45 45 0
+   10 45 0 45
+   15 0 60 0 
    20 30 30 30
 end
 
 path path_2
    0 -1 -1 -1
+   10 10 10 10
+   20 -10 10 10
+   30 -5 5 -5
 end
 
-define snowman snow
-define cone art
+define snowman snow_1
+define cone cone_1
+define articulated art_1
+define articulated art_2
 
-tell art animationPath path_1
-tell snow animationPath path_1 5 0.85
+tell cone_1 animationPath path_1
+tell art_1 animationPath path_1 5 0.85
+tell snow_1 animationPath path_2 6
+tell art_2 animationPath path_2 0 1.2
+tell camera animationPath cam_path

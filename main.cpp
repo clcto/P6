@@ -95,10 +95,11 @@ int main( int argc, char **argv )
 {
       // initialize toolkit
 	glutInit( &argc, argv );
-	appInit();
 
    if( argc > 1 )
       Scene::Instance()->ReadFile( argv[1] );
+
+	appInit();
 
    timer( 0 );
 
