@@ -6,7 +6,7 @@
 class Cylinder : public Shape
 {
    public:
-      Cylinder( string n = "" );
+      Cylinder();
       void Redraw();
       
    protected:

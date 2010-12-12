@@ -6,28 +6,23 @@
 
 #include "Disk.h"
 
-Disk::Disk( string n ) : Shape( n )
+Disk::Disk()
 {
 }
 
 void Disk::Redraw()
 {
-   Shape::beginTransform();
-
-   material.GLInit();
-
-   if( highlight )
+   if( visible )
    {
-      GLfloat emit[4] = {0.3, 0.3, 0.3, 1};
-      glMaterialfv( GL_FRONT_AND_BACK, GL_EMISSION, emit );
-   }
-   else
-   {
+      Shape::beginTransform();
+
+      material.GLInit();
+
       GLfloat emit[4] = {0, 0, 0, 1};
       glMaterialfv( GL_FRONT_AND_BACK, GL_EMISSION, emit );
+
+      gluDisk( quadric, 0, 1, 50, 5 );
+
+      Shape::endTransform();
    }
-
-   gluDisk( quadric, 0, 1, 50, 5 );
-
-   Shape::endTransform();
 }

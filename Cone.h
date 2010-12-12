@@ -11,7 +11,7 @@
 class Cone : public Shape
 {
    public:
-      Cone( string n = "" );
+      Cone();
       void Redraw();
       
    protected:

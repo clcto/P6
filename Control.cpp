@@ -46,150 +46,6 @@ void Control::Initialize( string name, int windowID )
 
    Control::LoadValues();
 
-#if 0
-   lookAtPanel = glui->add_panel( "glLookAt" );
-
-      eyeX = new GLUI_Spinner(
-         lookAtPanel, "eye x",
-         GLUI_SPINNER_FLOAT, NULL, Modified_Eye,
-         modified_cb );
-
-      eyeY = new GLUI_Spinner(
-         lookAtPanel, "eye y",
-         GLUI_SPINNER_FLOAT, NULL, Modified_Eye,
-         modified_cb );
-
-      eyeZ = new GLUI_Spinner(
-         lookAtPanel, "eye z",
-         GLUI_SPINNER_FLOAT, NULL, Modified_Eye,
-         modified_cb );
-
-   glui->add_separator_to_panel( lookAtPanel );
-
-      centerX = new GLUI_Spinner(
-         lookAtPanel, "center x",
-         GLUI_SPINNER_FLOAT, NULL, Modified_Center,
-         modified_cb );
-
-      centerY = new GLUI_Spinner(
-         lookAtPanel, "center y",
-         GLUI_SPINNER_FLOAT, NULL, Modified_Center,
-         modified_cb );
-
-      centerZ = new GLUI_Spinner(
-         lookAtPanel, "center z",
-         GLUI_SPINNER_FLOAT, NULL, Modified_Center,
-         modified_cb );
-
-   glui->add_separator_to_panel( lookAtPanel );
-
-      upX = new GLUI_Spinner(
-         lookAtPanel, "up i",
-         GLUI_SPINNER_FLOAT, NULL, Modified_Up,
-         modified_cb );
-
-      upY = new GLUI_Spinner(
-         lookAtPanel, "up j",
-         GLUI_SPINNER_FLOAT, NULL, Modified_Up,
-         modified_cb );
-
-      upZ = new GLUI_Spinner(
-         lookAtPanel, "up k",
-         GLUI_SPINNER_FLOAT, NULL, Modified_Up,
-         modified_cb );
-
-   mode = glui->add_radiogroup( NULL, Modified_Mode,
-            modified_cb );
-      glui->add_radiobutton_to_group(
-         mode, "glOrtho" );
-      glui->add_radiobutton_to_group(
-         mode, "glFrustum" );
-      glui->add_radiobutton_to_group(
-         mode, "gluPerspective" );
-
-   orthoFrustumPanel = glui->add_panel(
-      "Ortho/Frustum Parameters" );
-      
-      right = glui->add_spinner_to_panel(
-         orthoFrustumPanel, "Right",
-         GLUI_SPINNER_FLOAT, NULL,
-         Modified_OrthoFrustum, modified_cb );
-
-      left = glui->add_spinner_to_panel(
-         orthoFrustumPanel, "Left", 
-         GLUI_SPINNER_FLOAT, NULL,
-         Modified_OrthoFrustum, modified_cb );
-
-      bottom = glui->add_spinner_to_panel(
-         orthoFrustumPanel, "Bottom", 
-         GLUI_SPINNER_FLOAT, NULL,
-         Modified_OrthoFrustum, modified_cb );
-
-      top = glui->add_spinner_to_panel(
-         orthoFrustumPanel, "Top", 
-         GLUI_SPINNER_FLOAT, NULL,
-         Modified_OrthoFrustum, modified_cb );
-
-      ofNear = glui->add_spinner_to_panel(
-         orthoFrustumPanel, "Near", 
-         GLUI_SPINNER_FLOAT, NULL,
-         Modified_OrthoFrustum, modified_cb );
-
-      ofFar = glui->add_spinner_to_panel(
-         orthoFrustumPanel, "Far",
-         GLUI_SPINNER_FLOAT, NULL,
-         Modified_OrthoFrustum, modified_cb );
-
-   perspectivePanel = glui->add_panel(
-      "Perspective Parameters" );
-
-      fov = glui->add_spinner_to_panel(
-         perspectivePanel, "FOV Y", 
-         GLUI_SPINNER_FLOAT, NULL,
-         Modified_Perspective, modified_cb );
-
-      aspect = glui->add_spinner_to_panel(
-         perspectivePanel, "Aspect Ratio", 
-         GLUI_SPINNER_FLOAT, NULL,
-         Modified_Perspective, modified_cb );
-
-      pNear = glui->add_spinner_to_panel(
-         perspectivePanel, "Near", 
-         GLUI_SPINNER_FLOAT, NULL,
-         Modified_Perspective, modified_cb );
-
-      pFar = glui->add_spinner_to_panel(
-         perspectivePanel, "Far",
-         GLUI_SPINNER_FLOAT, NULL,
-         Modified_Perspective, modified_cb );
-
-   glui->add_column( 0 );
-   glui->add_column( 0 );
-
-   GLUI_Panel *panel;
-
-   panel = glui->add_panel( "Selection" );
-
-   selectionControl = glui->add_listbox_to_panel(
-      panel, "Name", NULL, Modified_Selection,
-      modified_cb );
-
-   vector<string> names = Scene::Instance()->GetNames();
-
-   for( uint i = 0; i < names.size(); ++i )
-      selectionControl->add_item( i, names[i].c_str() );
-
-   createTransformations();
-   createColor();
-
-   glui->add_button( 
-      "Quit", Modified_Quit, modified_cb );
-
-   LoadValues( Scene::Instance()->GetCamera() );
-
-
-   Scene::Instance()->SetSelected( 0 );
-#endif
 }
 
 void Control::LoadValues()
@@ -210,12 +66,12 @@ void Control::LoadValues()
    dir_elevation->set_float_val(
       s->GetDirectionalLight()->GetElevation() );
 
-   GLPoint p = s->GetPointLight()->GetLocation();
+   Point p = s->GetPointLight()->GetLocation();
    pnt_enable->set_int_val(
       s->GetPointLight()->IsOn() );
-   pnt_x->set_float_val( p.x );
-   pnt_y->set_float_val( p.y );
-   pnt_z->set_float_val( p.z );
+   pnt_x->set_float_val( p[X] );
+   pnt_y->set_float_val( p[Y] );
+   pnt_z->set_float_val( p[Z] );
 
    Color c = s->GetPointLight()->GetColor();
    redControl->set_float_val( c.red );

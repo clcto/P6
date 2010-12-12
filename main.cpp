@@ -19,7 +19,6 @@
 #include <vector>
 #include <iostream>
 #include <GL/glut.h>
-   // also includes gl.h and glu.h
 
 #include "Shape.h"
 #include "Control.h"
@@ -28,29 +27,54 @@
 #include "Cone.h"
 #include "Cylinder.h"
 #include "Snowman.h"
-
-#define min( a, b ) ( a < b ? a : b )
-#define max( a, b ) ( a > b ? a : b )
+#include "Path.h"
 
 using std::vector;
 using std::cout;
 
 const int windowWidth  = 500;
 const int windowHeight = 500;
+int window;
+
+// Function Declarations
+void appInit();
+void timer( int );
+void redraw();
+
 
    // initializes the GL portion of the application
-void appInit(void)
+void appInit()
 {
+	glutInitDisplayMode( GLUT_DEPTH | 
+           GLUT_DOUBLE | GLUT_RGB );
+	glutInitWindowSize( windowWidth, windowHeight ); 
+
+      // set the window properties
+	glutInitWindowPosition( 100, 150 );
+   window = glutCreateWindow( "Assignment 6 - "
+                                  "Animation" );
+
+      // define the function to call when a 
+      // redraw is requested
+	glutDisplayFunc( redraw );
    glEnable( GL_DEPTH_TEST );
 
    glEnable( GL_LIGHTING );
-   //glEnable( GL_COLOR_MATERIAL );
    glEnable( GL_LIGHT0 );
 
    glShadeModel( GL_SMOOTH );
 
-      // background color: white
    glClearColor( 1.0, 1.0, 1.0, 0.0 );
+   
+   Control::Instance()->Initialize( "Control", window );
+}
+
+void timer( int value )
+{
+   if( Scene::Instance()->IsRunning() )
+      glutPostWindowRedisplay( window );
+
+   glutTimerFunc( 41, timer, 0 );
 }
 
    // redraws the scene.
@@ -71,23 +95,12 @@ int main( int argc, char **argv )
 {
       // initialize toolkit
 	glutInit( &argc, argv );
-	glutInitDisplayMode( GLUT_DEPTH | 
-           GLUT_DOUBLE | GLUT_RGB );
-	glutInitWindowSize( windowWidth, windowHeight ); 
-
-      // set the window properties
-	glutInitWindowPosition( 100, 150 );
-   int window = glutCreateWindow( "P3 solution" );
-
-      // define the function to call when a 
-      // redraw is requested
-	glutDisplayFunc( redraw );
-
 	appInit();
 
-   Scene::Instance()->LoadDefault();
+   if( argc > 1 )
+      Scene::Instance()->ReadFile( argv[1] );
 
-   Control::Instance()->Initialize( "Control", window );
+   timer( 0 );
 
       // let glut do its thing
 	glutMainLoop();

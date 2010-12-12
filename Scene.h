@@ -10,29 +10,30 @@
 #define SCENE_H_
 
 #include <vector>
+#include <map>
 #include <string>
+#include <fstream>
 
 #include "Shape.h"
 #include "Camera.h"
 #include "Light.h"
+#include "Path.h"
 
 using std::vector;
 using std::string;
+using std::map;
+using std::ifstream;
 
 class Scene
 {
    public:
       static Scene* Instance();
       void Redraw();
-      void AddShape( Shape* newShape );
-      void LoadDefault();
+      void AddShape( Shape* newShape, string name );
       Camera& GetCamera();
-      void SetSelected( const uint& );
-      Shape* GetSelected();
-      vector<string> GetNames();
       Shape* GetShape( string name );
       void ReadFile( string );
-      bool Save( string );
+      bool IsRunning();
 
       Light* GetDirectionalLight();
       Light* GetPointLight();
@@ -40,37 +41,30 @@ class Scene
       ~Scene();
 
    private:
+      void processPath( vector<string>, ifstream& );
+      void processTell( vector<string> );
+      void processDefine( vector<string> );
+
       Scene();
 
-      void processDefine( const vector<string>& );
-      void processTranslate( const vector<string>& );
-      void processScale( const vector<string>& );
-      void processRotate( const vector<string>& );
-      void processColor( const vector<string>& );
-      void processEye( const vector<string>& );
-      void processCenter( const vector<string>& );
-      void processUp( const vector<string>& );
-      void processOrtho( const vector<string>& );
-      void processFrustum( const vector<string>& );
-      void processPerspective( const vector<string>& );
-
-
-         // holds the shapes on the screen
-      vector<Shape*> shapes;
-      
       Camera camera;
-      bool selected;
-      uint selectedIndex;
 
       static Scene* instance;
 
       Light* directionalLight;
       Light* pointLight;
+
+      bool isAnimating;
+
+      map<string, Path*> paths;
+      map<string, Shape*> shapes;
 };
 
 vector<string> tokenize( const string& input,
                          const string& delims );
 
 bool stringToFloat( const string&, float& );
+
+void trim( string& );
 
 #endif // SCENE_H_

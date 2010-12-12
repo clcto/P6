@@ -6,28 +6,23 @@
 
 #include "Sphere.h"
 
-Sphere::Sphere( string n ) : Shape( n )
+Sphere::Sphere()
 {
 }
 
 void Sphere::Redraw()
 {
-   Shape::beginTransform();
-
-   material.GLInit();
-
-   if( highlight )
+   if( visible )
    {
-      GLfloat emit[4] = {0.3, 0.3, 0.3, 1};
-      glMaterialfv( GL_FRONT_AND_BACK, GL_EMISSION, emit );
-   }
-   else
-   {
+      Shape::beginTransform();
+
+      material.GLInit();
+
       GLfloat emit[4] = {0, 0, 0, 1};
       glMaterialfv( GL_FRONT_AND_BACK, GL_EMISSION, emit );
+
+      gluSphere( quadric, 1, 50, 50 );
+
+      Shape::endTransform();
    }
-
-   gluSphere( quadric, 1, 50, 50 );
-
-   Shape::endTransform();
 }

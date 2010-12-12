@@ -16,8 +16,9 @@
 #include <string>
 
 #include "Color.h"
-#include "GLPoint.h"
+#include "Point.h"
 #include "Material.h"
+#include "Path.h"
 
 using std::string;
 
@@ -28,39 +29,40 @@ class Shape
 
          // creates the shape in its own coordinate 
          // system
-      Shape( string n = "" );
+      Shape();
 
       virtual ~Shape();
       
          // SetTranslation
          // sets the translation of the shape
-      void SetTranslation( GLPoint p );
       void SetTranslation( GLfloat, GLfloat, GLfloat );
+      void TranslateBy( float, float, float );
 
-      GLPoint GetTranslation() const;
+      Point GetTranslation() const;
 
          // set the scale of the shape
-      void SetScale( GLScale s );
+      void SetScale( Scale s );
       void SetScale( GLfloat, GLfloat, GLfloat ); 
 
-      GLScale GetScale() const;
+      Scale GetScale() const;
 
       virtual void SetMaterial( Material m );
       Material GetMaterial() const;
 
          
          // sets the rotation of the object
-      void SetRotation( GLfloat, GLVector );
+      void SetRotation( GLfloat, Vector );
       void SetRotation( GLfloat, GLfloat, GLfloat,
                         GLfloat );
 
       GLfloat GetRotationAngle() const;
-      GLVector GetRotationVector() const;
+      Vector GetRotationVector() const;
 
-      virtual void HighlightOn();
-      virtual void HighlightOff();
+      void SetPath( Path );
 
-      string GetName() const;
+      void SetVisible( bool );
+
+      virtual void NextFrame();
 
       virtual void Redraw() = 0;
 
@@ -73,22 +75,26 @@ class Shape
       void endTransform();
 
          // translation locations
-      GLPoint location;
+      Point location;
          
          // scale coefficients
-      GLScale scale;
+      Scale scale;
 
          // rotation
       GLfloat angle;
-      GLVector rotate;
+      Vector rotate;
 
       Material material;
 
       GLUquadric* quadric;
 
-      bool highlight;
+      bool visible, animate;
 
-      string name;
+      Path path;
+
+      uint frame;
+      int cur;
+      double dx, dy, dz;
 
 };
 

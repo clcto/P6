@@ -10,7 +10,7 @@
 class Snowman : public Shape
 {
    public:
-      Snowman( string n = "" );
+      Snowman();
 
       void SetMaterial( Material );
       void Redraw();

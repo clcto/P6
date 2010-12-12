@@ -11,11 +11,11 @@ SHELL = /bin/sh
 
 .DEFAULT_GOAL := P6
 
-P4: $(OBJECTS)
+P6: $(OBJECTS)
 	$(CC) $(OBJECTS) -o $@ $(LDFLAGS)
 
 $(OBJECTDIR)/%.o: $(SOURCEDIR)/%.cpp
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@ -g
 
 .PHONY: clean
 clean:

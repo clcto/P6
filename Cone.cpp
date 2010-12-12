@@ -7,8 +7,9 @@
 // --------------------------------------------------------
 #include "Cone.h"
 
-Cone::Cone( string n ) : Shape( n )
+Cone::Cone()
 {
+   material = Material::CHROME;  
 }
 
    // -----------------------------------------------------
@@ -16,22 +17,17 @@ Cone::Cone( string n ) : Shape( n )
    //    redraws the cone to the screen
 void Cone::Redraw()
 {
-   Shape::beginTransform();
-
-   material.GLInit();
-
-   if( highlight )
+   if( visible )
    {
-      GLfloat emit[4] = {0.3, 0.3, 0.3, 1};
-      glMaterialfv( GL_FRONT_AND_BACK, GL_EMISSION, emit );
-   }
-   else
-   {
+      Shape::beginTransform();
+
+      material.GLInit();
+
       GLfloat emit[4] = {0, 0, 0, 1};
       glMaterialfv( GL_FRONT_AND_BACK, GL_EMISSION, emit );
+
+      gluCylinder( quadric, 1, 0, 1, 50, 50 );
+
+      Shape::endTransform();
    }
-
-   gluCylinder( quadric, 1, 0, 1, 50, 50 );
-
-   Shape::endTransform();
 }

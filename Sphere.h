@@ -6,7 +6,7 @@
 class Sphere : public Shape
 {
    public:
-      Sphere( string n = "" );
+      Sphere();
       void Redraw();
       
    protected:

@@ -1,7 +1,8 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
-#include "GLPoint.h"
+#include "Point.h"
+#include "Path.h"
 #include <GL/glut.h>
 
 class Camera
@@ -12,6 +13,9 @@ class Camera
 
       void SetEyeSpherical( float t, float p,
                             float r = 1 );
+      void SetEyeRectangular( double, double, double );
+      void SetDeltaEyeRectangular(
+               double, double, double );
 
       void SetUpGLMatrices() const;
 
@@ -19,15 +23,21 @@ class Camera
       float GetHeading();
       float GetRadius();
 
-   private:
-      float theta, phi, radius;
+      void NextFrame();
 
-      GLPoint center;
-      GLVector up;
+      void SetPath( Path );
+
+   private:
+      Point eye;
+
+      Point center;
+      Vector up;
 
       GLdouble pNear, pFar;
 
       GLdouble fov, aspect;
+
+      Path path;
 };
 
 #endif

@@ -6,7 +6,8 @@
 // Carick Wienke
 // --------------------------------------------------------
 
-#include "GLPoint.h"
+#include <GL/glut.h>
+#include "Point.h"
 #include "Color.h"
 
 class Light
@@ -29,7 +30,7 @@ class Light
       float GetHeading();
       float GetRadius();
 
-      GLPoint GetLocation();
+      Point GetLocation();
 
       void SetColor( float, float, float );
 

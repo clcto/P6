@@ -6,7 +6,7 @@
 class Disk : public Shape
 {
    public:
-      Disk( string n = "" );
+      Disk();
       void Redraw();
       
    protected:

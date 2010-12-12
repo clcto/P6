@@ -5,29 +5,24 @@
 
 #include "Cylinder.h"
 
-Cylinder::Cylinder( string n ) : Shape( n )
+Cylinder::Cylinder()
 {
 }
 
    // draws the cylinder to the sceen
 void Cylinder::Redraw()
 {
-   Shape::beginTransform();
-
-   material.GLInit();
-
-   if( highlight )
+   if( visible )
    {
-      GLfloat emit[4] = {0.3, 0.3, 0.3, 1};
-      glMaterialfv( GL_FRONT_AND_BACK, GL_EMISSION, emit );
-   }
-   else
-   {
+      Shape::beginTransform();
+
+      material.GLInit();
+
       GLfloat emit[4] = {0, 0, 0, 1};
       glMaterialfv( GL_FRONT_AND_BACK, GL_EMISSION, emit );
+
+      gluCylinder( quadric, 1, 1, 1, 50, 50 );
+
+      Shape::endTransform();
    }
-
-   gluCylinder( quadric, 1, 1, 1, 50, 50 );
-
-   Shape::endTransform();
 }

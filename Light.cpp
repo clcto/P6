@@ -85,11 +85,11 @@ float Light::GetHeading()
    return atan2( position[1], position[0] ) * TO_DEG;
 }
 
-GLPoint Light::GetLocation()
+Point Light::GetLocation()
 {
-   GLPoint p = { position[0],
-                 position[1],
-                 position[2] };
+   Point p ( position[0],
+             position[1],
+             position[2] );
    return p;
 }
 
